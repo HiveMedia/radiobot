@@ -2,7 +2,7 @@ ShoutIRC RadioBot Cookbook
 =================
 The ShoutIRC RadioBot cookbook is designed to allow users a simple and easy to understand way of installing the ShoutIRC radiobot on their servers whiel still having full control over the settings of the radiobot
 
-Currently this cookbook only supports the AutoDJ plugin if RadioBot
+Currently this cookbook only supports the AutoDJ plugin of RadioBot
 
 Attributes
 ----------
