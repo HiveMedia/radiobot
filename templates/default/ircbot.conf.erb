@@ -1,0 +1,153 @@
+# RadioBot v5 Config File
+# RadioBot and IRCBot are Copyright 2004-2014 ShoutIRC.com
+
+# This file was made by chef, DO NOT EDIT BY HAND
+# Any changes will be written over at the next chef run!
+
+Base {
+	Nick <%= node['radiobot']['base']['nick'] %>
+	Fork 0
+	OnlineBackup 0
+#	LogChan #logging_channel
+	LogFile <%= node['radiobot']['base']['logfile'] %>
+#	PIDFile ircbot.pid
+	SecsBetweenUpdates 30
+	DoSpam <%= node['radiobot']['base']['do_spam'] ? 1 : 0 %>
+	DoOnjoin <%= node['radiobot']['base']['do_on_join'] ? 1 : 0 %>
+	DoTopic <%= node['radiobot']['base']['do_topic'] ? 1 : 0 %>
+	AutoRegOnHello <%= node['radiobot']['base']['auto_reg_on_hello'] ? 1 : 0 %>
+	EnableRequestSystem <%= node['radiobot']['base']['enable_request_sys'] ? 1 : 0 %>
+	EnableRating <%= node['radiobot']['base']['enable_rating'] ? 1 : 0 %>
+	AllowPMRequests	<%= node['radiobot']['base']['allow_pm_requests'] ? 1 : 0 %>
+	RemotePort <%= node['radiobot']['base']['remote_port'] %>
+	PullNameFromAnyServer 0
+	MultiSoundServer 0
+	DJName <%= node['radiobot']['base']['dj_name'] %>
+#	LangCode en_US	
+	SendQ 300
+#	BindIP			0.0.0.0
+	SSL_Cert <%= node['radiobot']['base']['ssl_cert'] %>
+	BackupDays		14
+	RegName <%= node['radiobot']['base']['reg_name'] %>
+	RegKey <%= node['radiobot']['base']['reg_key'] %>
+};
+
+// IRC Block
+IRC {
+<% if node['radiobot']['irc']['servers'].length > 0 -%>
+<%   node['radiobot']['irc']['servers'].each_with_index do |(server, conf), index| -%>
+<%="	Server#{index} {" %>
+<%="		Host #{server}" %>
+<%="		Port #{conf['port']}" %>
+<%="		SSL #{conf['ssl'] ? 1 : 0}" %>
+<%="		Pass #{conf['pass']}" if conf['pass'] %>
+<%="		OnConnect PRIVMSG NickServ :identify #{conf['identity_pass']}" if conf['identity_pass'] %>
+<%="		BindIP #{conf['bindip']}" if conf['bindip'] %>	 
+<%         if conf['channels'].length > 0 -%>
+<%           conf['channels'].each_with_index do |(channel, details), chan_index| -%>
+<%="		Channel#{chan_index} {" %>
+<%="			Channel #{channel}" %>
+<%="			Key #{details['channel_pass']}" if details['channel_pass'] %>	
+<%="			DoSpam #{details['do_spam'] ? 1 : 0}" %>	
+<%="			DoOnjoin #{details['do_on_join'] ? 1 : 0}" %>
+<%="			DoTopic #{details['do_topic'] ? 1 : 0}" %>
+<%="			SongInterval #{details['song_interval']}" %>
+<%="			SongIntervalSource #{details['song_interval_source']}" %>
+<%="			NoTopicCheck #{details['no_topic_check'] ? 1 : 0}" %>
+<%="		};" %>
+<%           end -%>
+<%         end -%>
+<%="	};" %>
+<%   end -%>
+<% end -%>
+};
+
+// Stream Server Block
+SS {
+<% if node['radiobot']['server_streams']['servers'].length > 0 -%>
+<%   node['radiobot']['server_streams']['servers'].each_with_index do |(server, conf), index| -%>
+<%="	Server#{index} {" %>
+<%="		Type #{conf['type']}" %>
+<%="		Host #{server}" %>
+<%="		Port #{conf['port']}" %>
+<%="		StreamID #{conf['stream_id']}" if server == "shoutcast" %>
+<%="		Mount #{conf['mount']}" %>
+<%="		User #{conf['user']}" %>
+<%="		Pass #{conf['pass']}" %>
+<%="	};" %>
+<%   end -%>
+<% end -%>
+};
+
+AutoDJ {
+	Server {
+		Password <%= node['radiobot']['autodj']['server']['password'] %>
+		Name <%= node['radiobot']['autodj']['server']['name'] %>
+		Description <%= node['radiobot']['autodj']['server']['description'] %>
+		Genre <%= node['radiobot']['autodj']['server']['genre'] %>
+		URL <%= node['radiobot']['autodj']['server']['url'] %>
+		ICQ <%= node['radiobot']['autodj']['server']['icq'] %>
+		AIM <%= node['radiobot']['autodj']['server']['aim'] %>
+		IRC <%= node['radiobot']['autodj']['server']['irc'] %>
+		Public <%= node['radiobot']['autodj']['server']['public'] ? 1 : 0 %>
+		Encoder <%= node['radiobot']['autodj']['server']['encoder'] %>
+		Bitrate <%= node['radiobot']['autodj']['server']['bitrate'] %>
+		Sample <%= node['radiobot']['autodj']['server']['sample'] %>
+		Channels <%= node['radiobot']['autodj']['server']['channels'] %>
+
+		Mount <%= node['radiobot']['autodj']['server']['mount'] %>
+
+		Content <%= node['radiobot']['autodj']['server']['music_dir'] %>
+		Promo <%= node['radiobot']['autodj']['server']['promos_dir'] %>
+	};
+
+	MP3_Encoder {
+		Mode <%= node['radiobot']['autodj']['mp3_encoder']['mode'] %>
+		VBR <%= node['radiobot']['autodj']['mp3_encoder']['vbr'] %>
+		MinBitrate <%= node['radiobot']['autodj']['mp3_encoder']['min_bitrate'] %>
+		MaxBitrate <%= node['radiobot']['autodj']['mp3_encoder']['max_bitrate'] %>
+		Quality <%= node['radiobot']['autodj']['mp3_encoder']['quality'] %>		
+		VBR_Quality <%= node['radiobot']['autodj']['mp3_encoder']['vbr_quality'] %>		
+	};
+
+	FileLister {	
+		List list.txt
+		Line %file%
+#		NewChar <h1>%char%</h1>
+		Header header.txt
+		Footer footer.txt
+	};
+
+	Queue_MySQL {
+		Host <%= node['radiobot']['autodj']['queue_mysql']['host'] %>
+		User <%= node['radiobot']['autodj']['queue_mysql']['user'] %>
+		Pass <%= node['radiobot']['autodj']['queue_mysql']['pass'] %>
+		Port <%= node['radiobot']['autodj']['queue_mysql']['port'] %>
+		DBName <%= node['radiobot']['autodj']['queue_mysql']['db_name'] %>
+		DBTable <%= node['radiobot']['autodj']['queue_mysql']['db_table'] %>
+		KeepHistory <%= node['radiobot']['autodj']['queue_mysql']['keep_history'] %>
+	};	
+
+	Options {
+<%="		QueuePlugin ./plugins/adjq_mysql.#{if platform?('windows') then 'dll' else 'so' end}" if node['radiobot']['autodj']['options']['use_mysql_queue'] %>
+		Resampler <%= node['radiobot']['autodj']['options']['resampler'] %>
+		NoPlayFilters <%= node['radiobot']['autodj']['options']['no_play_filters'] %>
+		NoRepeat <%= node['radiobot']['autodj']['options']['no_repeat'] %>
+		DoPromos <%= node['radiobot']['autodj']['options']['do_promos'] %>
+		NumPromos <%= node['radiobot']['autodj']['options']['num_promos'] %>
+		EnableRequests <%= node['radiobot']['autodj']['options']['enable_requests'] ? 1 : 0 %>
+		EnableFind <%= node['radiobot']['autodj']['options']['enable_find'] ? 1 : 0 %>
+		EnableCrossfade <%= node['radiobot']['autodj']['options']['enable_crossface'] ? 1 : 0 %>
+		EnableVoice <%= node['radiobot']['autodj']['options']['enable_voice'] ? 1 : 0 %>
+		VoiceArtist <%= node['radiobot']['autodj']['options']['voice_artist'] %>
+		VoiceTitle <%= node['radiobot']['autodj']['options']['voice_title'] %>
+		MoveDir <%= node['radiobot']['autodj']['options']['moved_dir'] %>
+		AutoStart <%= node['radiobot']['autodj']['options']['auto_start'] ? 1 :0 %>
+		AutoPlayIfNoSource <%= node['radiobot']['autodj']['options']['autoplay_if_no_source'] ? 1 : 0 %>
+		EnableYP <%= node['radiobot']['autodj']['options']['enable_yp'] ? 1 : 0 %>
+	};
+};
+
+Plugin {
+	Module0			plugins/AutoDJ.%soext%
+};
