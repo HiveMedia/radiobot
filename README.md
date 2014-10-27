@@ -1,5 +1,7 @@
 ShoutIRC RadioBot Cookbook
 =================
+[![Build Status](https://travis-ci.org/HiveMedia/radiobot.svg?branch=master)](https://travis-ci.org/HiveMedia/radiobot) [![Code Climate](https://codeclimate.com/github/HiveMedia/radiobot/badges/gpa.svg)](https://codeclimate.com/github/HiveMedia/radiobot) [![Test Coverage](https://codeclimate.com/github/HiveMedia/radiobot/badges/coverage.svg)](https://codeclimate.com/github/HiveMedia/radiobot)
+
 The ShoutIRC RadioBot cookbook is designed to allow users a simple and easy to understand way of installing the ShoutIRC radiobot on their servers whiel still having full control over the settings of the radiobot
 
 Currently this cookbook only supports the AutoDJ plugin of RadioBot
