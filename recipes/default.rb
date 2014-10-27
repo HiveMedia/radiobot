@@ -66,7 +66,7 @@ bash "install_radiobot" do
   code <<-EOH
 	 mkdir -p radiobot
 	 cd radiobot
-	 curl -o radiobot.tar.gz "https://www.shoutirc.com/index.php?mod=Downloads&action=download&id=#{curl_download_id}"
+	 wget -O radiobot.tar.gz "https://www.shoutirc.com/index.php?mod=Downloads&action=download&id=#{curl_download_id}"
 	 tar -xsvf radiobot.tar.gz
 	 rm radiobot.tar.gz
 	 chown radiobot ./ -R
