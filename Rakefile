@@ -1,5 +1,10 @@
 #!/usr/bin/env rake
 
+#Remove the FC0001 rule due to it be deprecated
+FoodCritic::Rake::LintTask.new do |t|
+  t.options = { tags: %w(~FC001) }
+end
+
 desc "Runs foodcritic linter"
 task :foodcritic do
   if Gem::Version.new("1.9.2") <= Gem::Version.new(RUBY_VERSION.dup)
