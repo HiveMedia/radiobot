@@ -33,9 +33,7 @@ e.g.
 Usage
 -----
 #### radiobot::default
-TODO: Write usage instructions for each cookbook.
 
-e.g.
 Just include `radiobot` in your node's `run_list`:
 
 ```json
@@ -62,3 +60,5 @@ Want to join in on the fun and help? You can do so by doing the following,
 License and Authors
 -------------------
 Authors: Liam Haworth <liam.haworth@hivemedia.net.au>
+
+The license is Apache v2 which can be found in the LICENSE file
