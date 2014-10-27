@@ -17,11 +17,11 @@ default['radiobot']['install'] = {
 			'ubuntu' => {
 				'packages' => 'openssl sqlite3 libwxgtk2.8-0 lame libtag1c2a libtagc0 libmp3lame0 libmp3lame-dev libogg-dev libvorbis-dev libsndfile1 libsndfile1-dev libavformat54 libavcodec54 libcurl4-openssl-dev libmpg123-0 libresample1 libncurses5 libphysfs1 libpcre3 libprotobuf8 libmysqlclient18 libfaac0 libopus0 libloudmouth1-0 libdbus-glib-1-2 libmuparser2 libsoxr0',
 				'downloads' => {
-					'13.10' => {
+					'13' => {
 						'i386' => 66,
 						'x86_64' => 68
 					},
-					'14.04' => {
+					'14' => {
 						'i686' => 138,
 						'x86_64' => 137
 					},
