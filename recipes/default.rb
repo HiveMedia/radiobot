@@ -10,6 +10,24 @@ if node['radiobot']['install'][node[:platform_family]].nil?
 	Chef::Log.error "A radiobot install options does not exist for '#{node['platform_family']}'. This means the radiobot cookbook does not have support for the	#{node['platform_family']} family."
 end
 
+if node[:platform_family] == "rhel"
+    #add the EPEL repo
+    yum_repository 'epel' do
+      description 'Extra Packages for Enterprise Linux'
+      mirrorlist 'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-6&arch=$basearch'
+      gpgkey 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
+      action :create
+    end
+
+    #add the RPMforge
+    yum_repository 'rpmforge' do
+      description 'RepoForge is the new RPMforge. Please excuse the dust as we move in and remodel'
+      mirrorlist 'http://mirrorlist.repoforge.org/el6/mirrors-rpmforge'
+      gpgkey 'http://apt.sw.be/RPM-GPG-KEY.dag.txt'
+      action :create
+    end    
+end
+
 #Get the install options for this platform
 install_options = node['radiobot']['install'][node[:platform_family]]
 
@@ -39,6 +57,8 @@ user "radiobot" do
   shell "/bin/bash"
 end
 
+curl_download_id = install_options['downloads'][node['platform_version'].split('.').first][node[:kernel][:machine]]
+
 #Download RadioBot for this platform
 bash "install_radiobot" do
   user "root"
@@ -46,7 +66,7 @@ bash "install_radiobot" do
   code <<-EOH
 	 mkdir -p radiobot
 	 cd radiobot
-	 wget -O radiobot.tar.gz "https://www.shoutirc.com/index.php?mod=Downloads&action=download&id=#{install_options['downloads'][node['platform_version']][node[:kernel][:machine]]}"
+	 curl -o radiobot.tar.gz "https://www.shoutirc.com/index.php?mod=Downloads&action=download&id=#{curl_download_id}"
 	 tar -xsvf radiobot.tar.gz
 	 rm radiobot.tar.gz
 	 chown radiobot ./ -R

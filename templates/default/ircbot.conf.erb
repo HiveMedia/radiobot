@@ -6,11 +6,11 @@
 
 Base {
 	Nick <%= node['radiobot']['base']['nick'] %>
-	Fork 0
+	Fork 1
 	OnlineBackup 0
 #	LogChan #logging_channel
 	LogFile <%= node['radiobot']['base']['logfile'] %>
-#	PIDFile ircbot.pid
+	PIDFile ircbot.pid
 	SecsBetweenUpdates 30
 	DoSpam <%= node['radiobot']['base']['do_spam'] ? 1 : 0 %>
 	DoOnjoin <%= node['radiobot']['base']['do_on_join'] ? 1 : 0 %>
