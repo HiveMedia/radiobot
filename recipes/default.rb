@@ -16,7 +16,7 @@ install_options = node['radiobot']['install'][node['platform_family']]
 
 #Check if overrides exist for distro specific install options
 if node['radiobot']['install'][node['platform_family']]['override'] && node['radiobot']['install'][node['platform_family']]['override'][node['platform']]
-	install_options = node['radiobot']['install'][node['platform_family']]['override'][node[:platform]]
+	install_options = node['radiobot']['install'][node['platform_family']]['override'][node['platform']]
 end
 
 #Check if this platform version is supported
@@ -60,7 +60,7 @@ user "radiobot" do
   shell "/bin/bash"
 end
 
-curl_download_id = install_options['downloads'][node['platform_version'].split('.').first][node[:kernel][:machine]]
+curl_download_id = install_options['downloads'][node['platform_version'].split('.').first][node['kernel']['machine']]
 
 #Download RadioBot for this platform
 bash "install_radiobot" do
