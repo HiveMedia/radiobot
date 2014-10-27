@@ -6,17 +6,17 @@
 #
 
 #Check if this platform is supported
-if node['radiobot']['install'][node[:platform_family]].nil?
+if node['radiobot']['install'][node['platform_family']].nil?
 	Chef::Log.error "A radiobot install options does not exist for '#{node['platform_family']}'. This means the radiobot cookbook does not have support for the	#{node['platform_family']} family."
     raise "A radiobot install options does not exist for '#{node['platform_family']}'. This means the radiobot cookbook does not have support for the	#{node['platform_family']} family."
 end
 
 #Get the install options for this platform
-install_options = node['radiobot']['install'][node[:platform_family]]
+install_options = node['radiobot']['install'][node['platform_family']]
 
 #Check if overrides exist for distro specific install options
-if node['radiobot']['install'][node[:platform_family]]['override'] && node['radiobot']['install'][node[:platform_family]]['override'][node[:platform]]
-	install_options = node['radiobot']['install'][node[:platform_family]]['override'][node[:platform]]
+if node['radiobot']['install'][node['platform_family']]['override'] && node['radiobot']['install'][node['platform_family']]['override'][node['platform']]
+	install_options = node['radiobot']['install'][node['platform_family']]['override'][node[:platform]]
 end
 
 #Check if this platform version is supported
@@ -26,7 +26,7 @@ if install_options['downloads'][node['platform_version'].split('.').first].nil?
 end
 
 #Add the repos that RHEL needs to install right
-if node[:platform_family] == "rhel"
+if node['platform_family'] == "rhel"
     #add the EPEL repo
     yum_repository 'epel' do
       description 'Extra Packages for Enterprise Linux'
